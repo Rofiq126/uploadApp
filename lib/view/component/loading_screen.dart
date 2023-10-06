@@ -49,19 +49,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
                   fontSize: 27,
                   fontWeight: FontWeight.w600),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amberAccent),
-                onPressed: () {
-                  widget.viewModel.cancelUpload().then((value) =>
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => const MainPage())));
-                  debugPrint('CANCELLLLLL');
-                },
-                child: const Text('Cancel'))
           ],
         ),
       ),

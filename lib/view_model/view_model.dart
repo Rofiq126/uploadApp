@@ -12,8 +12,10 @@ class ViewModel extends ChangeNotifier {
 
   Future pickImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    selectedImage = File(image!.path);
-    notifyListeners();
+    if (image != null) {
+      selectedImage = File(image.path);
+      notifyListeners();
+    }
   }
 
   Future uploadImage() async {
@@ -56,18 +58,13 @@ class ViewModel extends ChangeNotifier {
   Future cancelUpload() async {
     try {
       final path = selectedImage!.path.split('/').last;
-      final file = File(selectedImage!.path);
-      final ref = FirebaseStorage.instance.ref().child(path).putFile(file);
-      bool canceled = await ref.cancel();
-      if (canceled) {
-        log('Upload cancellation successful');
-      } else {
-        log('Upload cancellation failed');
-      }
+      final desertRef = FirebaseStorage.instance.ref().child(path);
 
-      message = 'Berhasil membatalkan';
+      await desertRef.delete();
+
+      message = 'cancel succes';
     } on FirebaseException catch (e) {
-      log('FirebaseException: ${e.toString()}');
+      debugPrint('FirebaseException: ${e.toString()}');
     }
     notifyListeners();
   }
