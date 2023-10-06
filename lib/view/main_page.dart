@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -88,6 +89,9 @@ class _MainPageState extends State<MainPage> {
                     setState(() {
                       uploadTask = ref.putFile(file);
                     });
+                    FirebaseAppCheck.instance.onTokenChange.listen((token) {
+  log("App Check token refreshed: $token");
+});
                     uploadTask!.snapshotEvents
                         .listen((TaskSnapshot taskSnapshot) {
                       _taskSnapshot = taskSnapshot.state;
