@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "266213269942",
+    "project_id": "uploadbackgroundapp",
+    "storage_bucket": "uploadbackgroundapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266213269942:android:f4b0e47a4dcc660d50a117",
+        "android_client_info": {
+          "package_name": "com.example.upload_background_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0pVuzGZyFr5Orq-SDZan5wjammmWd-L0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
