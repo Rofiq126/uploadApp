@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -59,14 +60,14 @@ class ViewModel extends ChangeNotifier {
       final ref = FirebaseStorage.instance.ref().child(path).putFile(file);
       bool canceled = await ref.cancel();
       if (canceled) {
-        print('Upload cancellation successful');
+        log('Upload cancellation successful');
       } else {
-        print('Upload cancellation failed');
+        log('Upload cancellation failed');
       }
 
       message = 'Berhasil membatalkan';
     } on FirebaseException catch (e) {
-      debugPrint('FirebaseException: ${e.toString()}');
+      log('FirebaseException: ${e.toString()}');
     }
     notifyListeners();
   }

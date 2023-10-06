@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -96,7 +97,7 @@ class _MainPageState extends State<MainPage> {
                               (taskSnapshot.bytesTransferred /
                                   taskSnapshot.totalBytes);
 
-                          debugPrint("Upload is $progress% complete.");
+                          log("Upload is $progress% complete.");
                           progress != 100.0
                               ? Navigator.push(
                                   context,
