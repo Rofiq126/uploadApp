@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:upload_background_app/view/main_page.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
 class LoadingScreen extends StatefulWidget {
   final double progress;
-  String percent;
-  ViewModel viewModel;
-  LoadingScreen(
+  final String percent;
+  final ViewModel viewModel;
+  const LoadingScreen(
       {Key? key,
       required this.progress,
       required this.percent,
@@ -29,12 +28,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
             const Text(
               'Loading',
               style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 30,
                   fontWeight: FontWeight.w600,
                   color: Colors.amberAccent),
             ),
             const SizedBox(
-              height: 100,
+              height: 50,
             ),
             const CircularProgressIndicator(
               color: Colors.amberAccent,

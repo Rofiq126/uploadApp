@@ -17,7 +17,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   String message = '';
   UploadTask? uploadTask;
-  TaskState? _taskSnapshot;
   double loadingProgress = 0.0;
 
   @override
@@ -96,7 +95,6 @@ class _MainPageState extends State<MainPage> {
                       });
                       uploadTask!.snapshotEvents
                           .listen((TaskSnapshot taskSnapshot) {
-                        _taskSnapshot = taskSnapshot.state;
                         switch (taskSnapshot.state) {
                           case TaskState.running:
                             final progress = 100.0 *
