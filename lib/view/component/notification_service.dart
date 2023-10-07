@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ServiceNotification {
@@ -6,7 +5,7 @@ class ServiceNotification {
       FlutterLocalNotificationsPlugin();
 
   final AndroidInitializationSettings androidInitializationSettings =
-      const AndroidInitializationSettings('upload');
+      const AndroidInitializationSettings('launcher');
 
   void initialNotification() async {
     InitializationSettings initializationSettings =
@@ -22,7 +21,7 @@ class ServiceNotification {
         AndroidNotificationDetails("channelId", "channelName",
             importance: Importance.max,
             priority: Priority.max,
-            icon: 'upload',
+            icon: 'launcher',
             showProgress: true,
             maxProgress: 100,
             progress: progress);
