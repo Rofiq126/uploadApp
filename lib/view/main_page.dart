@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:upload_background_app/view/component/loading_screen.dart';
+import 'package:upload_background_app/view/component/notification_service.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,7 +16,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   String message = '';
   UploadTask? uploadTask;
-  double loadingProgress = 0.0;
+  int loadingProgress = 0;
+  ServiceNotification notificationService = ServiceNotification();
 
   @override
   Widget build(BuildContext context) {
@@ -101,21 +101,19 @@ class _MainPageState extends State<MainPage> {
                                 (taskSnapshot.bytesTransferred /
                                     taskSnapshot.totalBytes);
 
-                            log("Upload is $progress% complete.");
-                            progress != 100.0
-                                ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => LoadingScreen(
-                                              progress: progress,
-                                              viewModel: viewModel,
-                                              percent:
-                                                  '${(progress.roundToDouble())}%',
-                                            )))
-                                : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const MainPage()));
+                            log("Upload is ${progress.roundToDouble().toInt()}% complete.");
+                            if (progress != 100.0) {
+                              setState(() {
+                                loadingProgress =
+                                    progress.roundToDouble().toInt();
+                              });
+                            }
+                            notificationService.sendNotification(
+                                progress: loadingProgress);
+                            if (progress == 100.0) {
+                              notificationService.sendNotification(
+                                  progress: 100);
+                            }
                             if (progress == 100.0) {
                               showDialog(
                                   context: context,
@@ -264,7 +262,7 @@ class _MainPageState extends State<MainPage> {
                     'Cancel Upload',
                     style: TextStyle(color: Colors.white),
                   )),
-            )
+            ),
           ],
         ),
       ),
