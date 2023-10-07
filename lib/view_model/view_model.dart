@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 class ViewModel extends ChangeNotifier {
   File? selectedImage;
   String message = '';
-  double progressUpload = 0.0;
+  int progressUpload = 0;
   UploadTask? uploadTask;
 
   Future pickImage() async {

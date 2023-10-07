@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:workmanager/workmanager.dart';
 
 class ServiceNotification {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -20,7 +21,7 @@ class ServiceNotification {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails("channelId", "channelName",
             importance: Importance.max,
-            priority: Priority.max,
+            priority: Priority.high,
             icon: 'launcher',
             showProgress: true,
             maxProgress: 100,
@@ -30,10 +31,7 @@ class ServiceNotification {
         NotificationDetails(android: androidNotificationDetails);
 
     await flutterLocalNotificationsPlugin.show(
-      0,
-      'Melakukan upload',
-      '${progress.toString()}%',
-      notificationDetails,
-    );
+        0, 'Melakukan upload', '${progress.toString()}%', notificationDetails,
+        payload: 'VIS');
   }
 }
