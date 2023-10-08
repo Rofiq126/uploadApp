@@ -4,8 +4,8 @@ import 'package:upload_background_app/common/custom_alertDialog.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
 class LoadingScreen extends StatefulWidget {
-  int progress;
-  LoadingScreen({Key? key, required this.progress}) : super(key: key);
+  final int progress;
+  const LoadingScreen({Key? key, required this.progress}) : super(key: key);
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();

@@ -1,10 +1,7 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:upload_background_app/common/custom_alertDialog.dart';
-import 'package:upload_background_app/view/component/loading_screen.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
