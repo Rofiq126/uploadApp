@@ -104,31 +104,11 @@ class _MainPageState extends State<MainPage> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amberAccent),
                   onPressed: () {
-                    viewModel.cancelUpload().then((value) => showDialog(
+                    viewModel.cancelUpload().then((value) => customAlertDialog(
                         context: context,
-                        builder: (_) => const AlertDialog(
-                                content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.cancel,
-                                  size: 70,
-                                  color: Colors.amberAccent,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Upload Canceled',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.amberAccent,
-                                      fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ))));
-                    debugPrint('CANCELLLLLL');
+                        message: 'Upload Canceled',
+                        icon: Icons.close,
+                        color: Colors.amberAccent));
                     setState(() {
                       viewModel.selectedImage = null;
                     });
