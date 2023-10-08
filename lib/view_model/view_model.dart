@@ -22,47 +22,51 @@ class ViewModel extends ChangeNotifier {
 
   Future uploadImage() async {
     try {
-      final path = selectedImage!.path.split('/').last;
-      final file = File(selectedImage!.path);
-      final ref = FirebaseStorage.instance.ref().child(path);
+      if (selectedImage!.path.isNotEmpty) {
+        final path = selectedImage!.path.split('/').last;
+        final file = File(selectedImage!.path);
+        final ref = FirebaseStorage.instance.ref().child(path);
 
-      final uploadTask = ref.putFile(
-        file,
-      );
-      uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
-        switch (taskSnapshot.state) {
-          case TaskState.running:
-            final progress = 100.0 *
-                (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
-            if (progress != 100.0) {
-              progressUpload = progress.roundToDouble().toInt();
-              serviceNotification.progressNotification(
-                  condition: 'Melakukan upload', progress: progressUpload);
-            }
-            if (progress == 100.0) {
-              serviceNotification.progressNotification(
-                  condition: 'Upload selesai', progress: 100);
-            }
-            debugPrint(
-                "Upload is ${progress.roundToDouble().toInt()}% complete.");
-            break;
-          case TaskState.paused:
-            message = "Upload is paused.";
-            break;
-          case TaskState.canceled:
-            message = "Upload was canceled";
-            serviceNotification.alertNotification();
-            break;
-          case TaskState.error:
-            message = 'Upload failed';
-            break;
-          case TaskState.success:
-            if (message != 'Upload canceled') {
-              message = 'Upload success';
-            }
-            break;
-        }
-      });
+        final uploadTask = ref.putFile(
+          file,
+        );
+        uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
+          switch (taskSnapshot.state) {
+            case TaskState.running:
+              final progress = 100.0 *
+                  (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+              if (progress != 100.0) {
+                progressUpload = progress.roundToDouble().toInt();
+                serviceNotification.progressNotification(
+                    condition: 'Melakukan upload', progress: progressUpload);
+              }
+              if (progress == 100.0) {
+                serviceNotification.progressNotification(
+                    condition: 'Upload selesai', progress: 100);
+              }
+              debugPrint(
+                  "Upload is ${progress.roundToDouble().toInt()}% complete.");
+              break;
+            case TaskState.paused:
+              message = "Upload is paused.";
+              break;
+            case TaskState.canceled:
+              message = "Upload was canceled";
+              serviceNotification.alertNotification();
+              break;
+            case TaskState.error:
+              message = 'Upload failed';
+              break;
+            case TaskState.success:
+              if (message != 'Upload canceled') {
+                message = 'Upload success';
+              }
+              break;
+          }
+        });
+      } else {
+        message = 'Please select image';
+      }
     } on FirebaseException catch (e) {
       debugPrint(e.code);
     }

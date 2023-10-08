@@ -75,7 +75,7 @@ class _MainPageState extends State<MainPage> {
               height: 16,
             ),
             Visibility(
-              visible: viewModel.selectedImage == null ? false : true,
+              visible: true,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amberAccent),
@@ -99,7 +99,7 @@ class _MainPageState extends State<MainPage> {
               height: 10,
             ),
             Visibility(
-              visible: viewModel.selectedImage == null ? false : true,
+              visible: true,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amberAccent),
