@@ -1,5 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:workmanager/workmanager.dart';
 
 class ServiceNotification {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -12,26 +11,54 @@ class ServiceNotification {
     InitializationSettings initializationSettings =
         InitializationSettings(android: androidInitializationSettings);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void sendNotification({
-    required int progress,
-  }) async {
+  void progressNotification(
+      {required int progress, required String condition}) async {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails("channelId", "channelName",
             importance: Importance.max,
-            priority: Priority.high,
+            priority: Priority.max,
             icon: 'launcher',
             showProgress: true,
+            autoCancel: false,
             maxProgress: 100,
             progress: progress);
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .requestNotificationsPermission();
+
     await flutterLocalNotificationsPlugin.show(
-        0, 'Melakukan upload', '${progress.toString()}%', notificationDetails,
+        0, condition, '${progress.toString()}%', notificationDetails,
+        payload: 'VIS');
+  }
+
+  void alertNotification() async {
+    AndroidNotificationDetails androidNotificationDetails =
+        const AndroidNotificationDetails(
+      "channelId",
+      "channelName",
+      importance: Importance.max,
+      priority: Priority.max,
+      icon: 'launcher',
+    );
+
+    NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .requestNotificationsPermission();
+
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Upload gagal', 'Mohon coba lagi', notificationDetails,
         payload: 'VIS');
   }
 }

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:upload_background_app/common/custom_alertDialog.dart';
+import 'package:upload_background_app/view/component/loading_screen.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
@@ -43,6 +45,7 @@ class _MainPageState extends State<MainPage> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amberAccent),
                 onPressed: () {
+                  viewModel.selectedImage = null;
                   viewModel.pickImage().then((value) => Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const MainPage())));
                 },
@@ -80,139 +83,14 @@ class _MainPageState extends State<MainPage> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amberAccent),
                   onPressed: () {
-                    setState(() {
-                      viewModel.message = '';
-                    });
-                    try {
-                      final path =
-                          viewModel.selectedImage!.path.split('/').last;
-
-                      final file = File(viewModel.selectedImage!.path);
-                      final ref = FirebaseStorage.instance.ref().child(path);
-
-                      setState(() {
-                        uploadTask = ref.putFile(file);
-                      });
-                      uploadTask!.snapshotEvents
-                          .listen((TaskSnapshot taskSnapshot) {
-                        switch (taskSnapshot.state) {
-                          case TaskState.running:
-                            final progress = 100.0 *
-                                (taskSnapshot.bytesTransferred /
-                                    taskSnapshot.totalBytes);
-
-                            log("Upload is ${progress.roundToDouble().toInt()}% complete.");
-                            if (progress != 100.0) {
-                              setState(() {
-                                loadingProgress =
-                                    progress.roundToDouble().toInt();
-                              });
-                            }
-                            notificationService.sendNotification(
-                                progress: loadingProgress);
-                            if (progress == 100.0) {
-                              notificationService.sendNotification(
-                                  progress: 100);
-                            }
-                            if (progress == 100.0) {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      content: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(
-                                            Icons.check,
-                                            size: 70,
-                                            color: Colors.green,
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          const Text(
-                                            'Upload Succesfull',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.green,
-                                                fontWeight: FontWeight.w500),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.amberAccent),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('Close'))
-                                        ],
-                                      ),
-                                    );
-                                  });
-                            }
-
-                            break;
-                          case TaskState.paused:
-                            message = "Upload is paused.";
-                            break;
-                          case TaskState.canceled:
-                            message = "Upload was canceled";
-                            showDialog(
-                                context: context,
-                                builder: (_) => const AlertDialog(
-                                        content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.cancel,
-                                          size: 70,
-                                          color: Colors.amberAccent,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          'Upload Canceled',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.redAccent,
-                                              fontWeight: FontWeight.w500),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    )));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const MainPage()));
-                            break;
-                          case TaskState.error:
-                            message = 'Upload failed';
-
-                            break;
-                          case TaskState.success:
-                            setState(() {
-                              message = 'Upload success';
-                            });
-
-                            break;
-                        }
-                      });
-
-                      uploadTask!.whenComplete(() {});
-                      setState(() {
-                        uploadTask = null;
-                      });
-                    } on FirebaseException catch (e) {
-                      e.code == 'The operation was cancelled';
+                    viewModel.message = '';
+                    viewModel.uploadImage();
+                    if (viewModel.message == 'Upload success') {
+                      customAlertDialog(
+                          context: context,
+                          message: 'Upload Success',
+                          icon: Icons.check,
+                          color: Colors.green);
                     }
                   },
                   child: const Text(
