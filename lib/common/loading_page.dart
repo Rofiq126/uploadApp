@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:upload_background_app/common/custom_alert_dialog.dart';
+import 'package:upload_background_app/view/component/notification_service.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  ServiceNotification serviceNotification = ServiceNotification();
   @override
   Widget build(BuildContext context) {
     var viewModel = Provider.of<ViewModel>(context, listen: false);
@@ -57,7 +59,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                         message: 'Upload Canceled',
                         icon: Icons.check,
                         color: Colors.amber);
-                  });
+                  }).then((value) => serviceNotification.alertNotification());
                 },
                 child: const Text(
                   'Cancel',
