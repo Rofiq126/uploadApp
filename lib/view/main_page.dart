@@ -1,7 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:upload_background_app/common/custom_alertDialog.dart';
+import 'package:upload_background_app/common/custom_alert_dialog.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
@@ -81,14 +81,7 @@ class _MainPageState extends State<MainPage> {
                       backgroundColor: Colors.amberAccent),
                   onPressed: () {
                     viewModel.message = '';
-                    viewModel.uploadImage();
-                    if (viewModel.message == 'Upload success') {
-                      customAlertDialog(
-                          context: context,
-                          message: 'Upload Success',
-                          icon: Icons.check,
-                          color: Colors.green);
-                    }
+                    viewModel.uploadImage(context: context);
                   },
                   child: const Text(
                     'Upload Gambar',
@@ -99,7 +92,7 @@ class _MainPageState extends State<MainPage> {
               height: 10,
             ),
             Visibility(
-              visible: true,
+              visible: false,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amberAccent),
