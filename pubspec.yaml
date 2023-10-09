@@ -45,6 +45,7 @@ dependencies:
   workmanager: ^0.5.1
   google_sign_in: ^6.1.5
   firebase_auth: ^4.10.1
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:
