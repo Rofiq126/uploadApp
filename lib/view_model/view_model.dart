@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:upload_background_app/common/custom_alert_dialog.dart';
-import 'package:upload_background_app/common/loading_screen.dart';
+import 'package:upload_background_app/common/loading_page.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
 
 class ViewModel extends ChangeNotifier {
