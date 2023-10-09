@@ -41,7 +41,9 @@ class _LoginPageState extends State<LoginPage> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amberAccent),
                 onPressed: () {
-                  viewModel.anonymousLogin();
+                  viewModel
+                      .anonymousLogin()
+                      .then((value) => viewModel.notifPermission());
                 },
                 child: const Text(
                   'Masuk Aplikasi',
