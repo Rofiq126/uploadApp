@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:upload_background_app/common/custom_alert_dialog.dart';
+import 'package:upload_background_app/common/loading_screen.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
 
 class ViewModel extends ChangeNotifier {
@@ -20,17 +22,17 @@ class ViewModel extends ChangeNotifier {
     }
   }
 
-  Future uploadImage() async {
+  Future uploadImage({required BuildContext context}) async {
     try {
-      if (selectedImage!.path.isNotEmpty) {
+      if (selectedImage != null) {
         final path = selectedImage!.path.split('/').last;
         final file = File(selectedImage!.path);
         final ref = FirebaseStorage.instance.ref().child(path);
 
-        final uploadTask = ref.putFile(
+        uploadTask = ref.putFile(
           file,
         );
-        uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
+        uploadTask?.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
           switch (taskSnapshot.state) {
             case TaskState.running:
               final progress = 100.0 *
@@ -39,6 +41,11 @@ class ViewModel extends ChangeNotifier {
                 progressUpload = progress.roundToDouble().toInt();
                 serviceNotification.progressNotification(
                     condition: 'Melakukan upload', progress: progressUpload);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            LoadingScreen(progress: progressUpload)));
               }
               if (progress == 100.0) {
                 serviceNotification.progressNotification(
@@ -51,16 +58,19 @@ class ViewModel extends ChangeNotifier {
               message = "Upload is paused.";
               break;
             case TaskState.canceled:
-              message = "Upload was canceled";
-              serviceNotification.alertNotification();
+              message = 'Upload canceled';
               break;
             case TaskState.error:
               message = 'Upload failed';
               break;
             case TaskState.success:
-              if (message != 'Upload canceled') {
-                message = 'Upload success';
-              }
+              message = 'Upload success';
+              customAlertDialog(
+                  context: context,
+                  message: 'Upload Success',
+                  icon: Icons.check,
+                  color: Colors.green);
+
               break;
           }
         });
@@ -68,30 +78,57 @@ class ViewModel extends ChangeNotifier {
         message = 'Please select image';
       }
     } on FirebaseException catch (e) {
-      debugPrint(e.code);
+      switch (e.code) {
+        case 'firebase_storage/canceled':
+          message = 'Cancel success';
+          debugPrint(e.code);
+          break;
+        case 'storage/canceled':
+          message = 'Cancel success';
+          debugPrint(e.code);
+          break;
+        default:
+          debugPrint('FirebaseException: ${e.code}');
+      }
     }
     notifyListeners();
   }
 
   Future cancelUpload() async {
     try {
-      final path = selectedImage!.path.split('/').last;
-      final file = File(selectedImage!.path);
-      final ref = FirebaseStorage.instance.ref().child(path).putFile(file);
-      await ref.cancel();
+      await uploadTask!.pause();
       message = 'cancel succes';
     } on FirebaseException catch (e) {
-      debugPrint('FirebaseException: ${e.code}');
+      switch (e.code) {
+        case 'firebase_storage/canceled':
+          message = 'Cancel success';
+          debugPrint(e.code);
+          break;
+        case 'storage/canceled':
+          message = 'Cancel success';
+          debugPrint(e.code);
+          break;
+        case 'firebase_storage/unknown':
+          message =
+              'Cancel operation was called on a task which does not exist.';
+          debugPrint(e.code);
+          break;
+        case 'Code: -13040 HttpResult: 0':
+          message = 'ERORRRRRR';
+          debugPrint(e.code);
+          break;
+        default:
+          debugPrint('FirebaseException: ${e.code}');
+      }
     }
     notifyListeners();
   }
 
   Future anonymousLogin() async {
     try {
-      final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      await FirebaseAuth.instance.signInAnonymously();
       message = 'Login succesfull';
       debugPrint("Signed in with temporary account.");
-      debugPrint(userCredential.toString());
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "operation-not-allowed":
