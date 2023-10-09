@@ -57,8 +57,7 @@ class ServiceNotification {
             AndroidFlutterLocalNotificationsPlugin>()!
         .requestNotificationsPermission();
 
-    await flutterLocalNotificationsPlugin.show(
-        0, 'Upload gagal', 'Mohon coba lagi', notificationDetails,
-        payload: 'VIS');
+    await flutterLocalNotificationsPlugin
+        .show(0, 'Upload Canceled ', '', notificationDetails, payload: 'VIS');
   }
 }
