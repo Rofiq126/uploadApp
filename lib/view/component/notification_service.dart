@@ -29,10 +29,10 @@ class ServiceNotification {
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!
-        .requestNotificationsPermission();
+    // flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //         AndroidFlutterLocalNotificationsPlugin>()!
+    //     .requestNotificationsPermission();
 
     await flutterLocalNotificationsPlugin.show(
         0, condition, '${progress.toString()}%', notificationDetails,
@@ -51,11 +51,6 @@ class ServiceNotification {
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!
-        .requestNotificationsPermission();
 
     await flutterLocalNotificationsPlugin
         .show(0, 'Upload Canceled ', '', notificationDetails, payload: 'VIS');
