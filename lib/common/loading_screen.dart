@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:upload_background_app/common/custom_alert_dialog.dart';
-import 'package:upload_background_app/view/main_page.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
 class LoadingScreen extends StatefulWidget {
