@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:upload_background_app/common/custom_alert_dialog.dart';
 import 'package:upload_background_app/common/loading_page.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
@@ -70,6 +71,7 @@ class ViewModel extends ChangeNotifier {
                   message: 'Upload Success',
                   icon: Icons.check,
                   color: Colors.green);
+              selectedImage = null;
 
               break;
           }
@@ -137,6 +139,18 @@ class ViewModel extends ChangeNotifier {
         default:
           message = "Unknown error.";
       }
+    }
+  }
+
+  Future notifPermission() async {
+    try {
+      if (await Permission.notification.request().isGranted) {
+        debugPrint('Permission granted');
+      } else {
+        debugPrint('Permission denied');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 }
