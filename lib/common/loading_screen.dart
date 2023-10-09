@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:upload_background_app/common/custom_alertDialog.dart';
+import 'package:upload_background_app/common/custom_alert_dialog.dart';
+import 'package:upload_background_app/view/main_page.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -51,11 +52,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amberAccent),
                 onPressed: () {
-                  viewModel.cancelUpload().then((value) => customAlertDialog(
-                      context: context,
-                      message: 'Upload Canceled',
-                      icon: Icons.close,
-                      color: Colors.amberAccent));
+                  viewModel.cancelUpload().then((value) {
+                    customAlertDialog(
+                        context: context,
+                        message: 'Upload Canceled',
+                        icon: Icons.check,
+                        color: Colors.amber);
+                  });
                 },
                 child: const Text(
                   'Cancel',
