@@ -1,7 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:upload_background_app/common/custom_alert_dialog.dart';
 import 'package:upload_background_app/view/component/notification_service.dart';
 import 'package:upload_background_app/view_model/view_model.dart';
 
@@ -34,84 +33,78 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amberAccent),
-                onPressed: () {
-                  viewModel.selectedImage = null;
-                  viewModel.pickImage().then((value) => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const MainPage())));
-                },
-                child: const Text(
-                  'Pilih Gambar',
-                  style: TextStyle(color: Colors.white),
-                )),
-            const SizedBox(
-              height: 16,
-            ),
-            viewModel.selectedImage != null
-                ? Image.file(
-                    viewModel.selectedImage!,
-                    width: size.width * 0.7,
-                  )
-                : const Column(
-                    children: [
-                      Icon(
-                        Icons.hide_image,
-                        color: Colors.grey,
-                        size: 70,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('Tolong pilih gambar')
-                    ],
-                  ),
-            const SizedBox(
-              height: 16,
-            ),
-            Visibility(
-              visible: true,
-              child: ElevatedButton(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amberAccent),
                   onPressed: () {
-                    viewModel.message = '';
-                    viewModel.uploadImage(context: context);
+                    viewModel.selectedImage = null;
+                    viewModel.pickImage().then((value) => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MainPage())));
                   },
                   child: const Text(
-                    'Upload Gambar',
+                    'Pilih Gambar',
                     style: TextStyle(color: Colors.white),
                   )),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Visibility(
-              visible: false,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amberAccent),
-                  onPressed: () {
-                    viewModel.cancelUpload().then((value) => customAlertDialog(
-                        context: context,
-                        message: 'Upload Canceled',
-                        icon: Icons.close,
-                        color: Colors.amberAccent));
-                    setState(() {
-                      viewModel.selectedImage = null;
-                    });
-                  },
-                  child: const Text(
-                    'Cancel Upload',
-                    style: TextStyle(color: Colors.white),
-                  )),
-            ),
-          ],
+              const SizedBox(
+                height: 16,
+              ),
+              viewModel.selectedImage != null
+                  ? Image.file(
+                      viewModel.selectedImage!,
+                      width: size.width * 0.7,
+                    )
+                  : const Column(
+                      children: [
+                        Icon(
+                          Icons.hide_image,
+                          color: Colors.grey,
+                          size: 70,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('Tolong pilih gambar')
+                      ],
+                    ),
+              const SizedBox(
+                height: 16,
+              ),
+              Visibility(
+                visible: true,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amberAccent),
+                    onPressed: () {
+                      viewModel.message = '';
+                      viewModel.uploadImage(context: context);
+                    },
+                    child: const Text(
+                      'Upload Gambar',
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Visibility(
+                visible: false,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amberAccent),
+                    onPressed: () {},
+                    child: const Text(
+                      'Cancel Upload',
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );
